@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#030a11">
-<title>MPH Coach — Mobile V2</title>
+<title>MPH Coach — v0.91</title>
 <style>
 :root{
   --bg:#020810;
@@ -98,11 +99,12 @@ button,input{font:inherit}
   transform:translateX(-50%);
   overflow:visible;
 }
-.zone{fill:none;stroke-width:30;stroke-linecap:round}
+.zone{fill:none;stroke-width:30;stroke-linecap:butt}
 .zone-red{stroke:var(--red)}
 .zone-yellow{stroke:var(--yellow)}
 .zone-green{stroke:var(--green)}
 .major-tick{stroke:#fff;stroke-width:5;stroke-linecap:round}
+.zone-divider{stroke:#fff;stroke-width:7;stroke-linecap:round}
 .minor-tick{stroke-width:2.5;stroke-linecap:round}
 .gauge-number{
   fill:#fff;font-size:19px;font-weight:950;
@@ -393,13 +395,14 @@ function buildTicks(){
   const cx=380,cy=370;
   for(let i=0;i<=30;i++){
     const value=40+i,angle=Math.PI-(i/30)*Math.PI,major=i%5===0;
-    const r1=major?282:289,r2=major?306:302;
+    const divider=value===50||value===60;
+    const r1=divider?274:(major?282:289),r2=divider?312:(major?306:302);
     const line=document.createElementNS(NS,"line");
     line.setAttribute("x1",cx+Math.cos(angle)*r1);
     line.setAttribute("y1",cy-Math.sin(angle)*r1);
     line.setAttribute("x2",cx+Math.cos(angle)*r2);
     line.setAttribute("y2",cy-Math.sin(angle)*r2);
-    line.setAttribute("class",major?"major-tick":"minor-tick");
+    line.setAttribute("class",divider?"zone-divider":(major?"major-tick":"minor-tick"));
     if(!major) line.style.stroke=value<50?"var(--red)":value<60?"var(--yellow)":"var(--green)";
     group.appendChild(line);
     if(major){
