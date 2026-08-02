@@ -477,7 +477,10 @@ function update(){
   $("oppMain").textContent=`Improve ${best.name} by ${seconds.toFixed(1)} sec`;
   $("oppGain").textContent=`Potential Gain: +${gain.toFixed(1)} MPH`;
 }
-
+ids.forEach(id => {
+  $(id).addEventListener("input", update);
+  $(id).addEventListener("change", update);
+});
 $("loadBtn").addEventListener("click", async () => {
   const cashier = $("cashier").value.trim();
   const date = $("performanceDate").value;
@@ -508,10 +511,11 @@ $("loadBtn").addEventListener("click", async () => {
     baseline.inactive = Number(data.inactiveTime) || 0;
     baseline.secure = Number(data.terminalSecure) || 0;
 
-  ids.forEach(id => {
-  $(id).addEventListener("input", update);
-  $(id).addEventListener("change", update);
-  $(id).oninput = update;
+ids.forEach(id => {
+  $(id).value = baseline[id];
+});
+
+update();
 });
     });
 
