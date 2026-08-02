@@ -261,6 +261,7 @@ button,input{font:inherit}
   <section class="lookup card">
     <label for="cashier">Cashier Number</label>
     <input id="cashier" inputmode="numeric" value="146">
+    <input id="performanceDate" type="date">
     <button id="loadBtn" class="load-btn" type="button">☁ &nbsp; LOAD MY NUMBERS</button>
     <div id="error" class="error">Use sample cashier number 146.</div>
   </section>
@@ -384,6 +385,7 @@ button,input{font:inherit}
 <div id="modal" class="modal"><div class="modal-card"><h3>How it works</h3><p>MPH is calculated behind the scenes by adding Ring Time, Tender Time, Inactive Time, and Terminal Secure, then dividing 3,600 by that total. The cashier only sees the result.</p><button id="closeModal">GOT IT</button></div></div>
 
 <script>
+const API_URL = "https://script.google.com/macros/s/AKfycbzZ3MPOIK7xZeL2KR1AjA6D5aHuIvp5JLD2aL5mD49CDnFCxzxznEBoFbEHZ9nDe6It/exec";
 const baseline={ring:48.4,tender:8.7,inactive:4.1,secure:0.2};
 const ids=["ring","tender","inactive","secure"];
 const $=id=>document.getElementById(id);
@@ -476,16 +478,48 @@ function update(){
   $("oppGain").textContent=`Potential Gain: +${gain.toFixed(1)} MPH`;
 }
 
-ids.forEach(id=>$(id).addEventListener("input",update));
-$("resetBtn").addEventListener("click",()=>{ids.forEach(id=>$(id).value=baseline[id]);update()});
-$("loadBtn").addEventListener("click",()=>{
-  const ok=$("cashier").value.trim()==="146";
-  $("error").style.display=ok?"none":"block";
-  if(ok){ids.forEach(id=>$(id).value=baseline[id]);update()}
+$("loadBtn").addEventListener("click", async () => {
+  const cashier = $("cashier").value.trim();
+  const date = $("performanceDate").value;
+
+  $("error").style.display = "none";
+
+  if (!cashier || !date) {
+    $("error").textContent = "Enter a cashier number and performance date.";
+    $("error").style.display = "block";
+    return;
+  }
+
+  try {
+    $("loadBtn").textContent = "LOADING...";
+
+    const response = await fetch(
+      `${API_URL}?cashier=${encodeURIComponent(cashier)}&date=${encodeURIComponent(date)}`
+    );
+
+    const data = await response.json();
+
+    if (!data.success) {
+      throw new Error(data.error || "No cashier record found.");
+    }
+
+    baseline.ring = Number(data.ringTime) || 0;
+    baseline.tender = Number(data.tenderTime) || 0;
+    baseline.inactive = Number(data.inactiveTime) || 0;
+    baseline.secure = Number(data.terminalSecure) || 0;
+
+    ids.forEach(id => {
+      $(id).value = baseline[id];
+    });
+
+    update();
+  } catch (error) {
+    $("error").textContent = error.message;
+    $("error").style.display = "block";
+  } finally {
+    $("loadBtn").textContent = "☁  LOAD MY NUMBERS";
+  }
 });
-$("howBtn").addEventListener("click",()=>$("modal").classList.add("open"));
-$("closeModal").addEventListener("click",()=>$("modal").classList.remove("open"));
-$("modal").addEventListener("click",e=>{if(e.target===$("modal"))$("modal").classList.remove("open")});
 
 buildTicks();
 currentAngle=gaugeAngle(mph(baseline));
