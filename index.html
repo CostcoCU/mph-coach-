@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#030a11">
-<title>MPH Coach</title>
+<title>MPH Coach — v1.0.1</title>
 <style>
 :root{
   --bg:#020810;--panel:#09131e;--line:#26384b;--text:#f7f8fb;--muted:#b9c2cd;
@@ -29,6 +29,7 @@ button,input{font:inherit}
 .logo{width:49px;height:49px;flex:none}
 .brand-title{margin:0;font-size:28px;font-weight:950;line-height:1;letter-spacing:-.7px}
 .brand-sub{margin-top:4px;color:#c5ccd5;font-size:14px}
+.version-label{margin-top:3px;color:#7f93a8;font-size:11px;font-weight:800}
 
 .lookup{
   display:grid;grid-template-columns:1fr 1.15fr;gap:10px;align-items:center;
@@ -163,6 +164,7 @@ button,input{font:inherit}
     <div>
       <h1 class="brand-title">MPH COACH</h1>
       <div class="brand-sub">Live Performance Coaching</div>
+      <div class="version-label">v1.0.1</div>
     </div>
   </header>
 
@@ -457,7 +459,7 @@ $("loadBtn").addEventListener("click",async()=>{
   if(!cashier){
     $("error").textContent="Enter a cashier number.";$("error").style.display="block";return;
   }
-  if(!API_URL||API_URL.includes("https://script.google.com/macros/s/AKfycbzZ3MPOIK7xZeL2KR1AjA6D5aHuIvp5JLD2aL5mD49CDnFCxzxznEBoFbEHZ9nDe6It/exec")){
+  if(!API_URL||API_URL.includes("PASTE_YOUR")){
     $("error").textContent="Add your Google Apps Script web-app URL in index.html first.";$("error").style.display="block";return;
   }
 
