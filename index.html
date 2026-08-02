@@ -1,32 +1,20 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#030a11">
-<title>MPH Coach — v0.91</title>
+<title>MPH Coach</title>
 <style>
 :root{
-  --bg:#020810;
-  --panel:#09131e;
-  --line:#26384b;
-  --text:#f7f8fb;
-  --muted:#b9c2cd;
-  --green:#59d42f;
-  --red:#ff342f;
-  --yellow:#ffc21a;
-  --blue:#1687f8;
-  --purple:#9b55df;
-  --track:#293544;
+  --bg:#020810;--panel:#09131e;--line:#26384b;--text:#f7f8fb;--muted:#b9c2cd;
+  --green:#59d42f;--red:#ff342f;--yellow:#ffc21a;--blue:#1687f8;--purple:#9b55df;
+  --track:#293544;--soft-green:#18351d;--soft-yellow:#3c3211;--soft-red:#3b1717;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;background:var(--bg)}
 body{
-  margin:0;
-  min-height:100vh;
-  padding-bottom:82px;
-  color:var(--text);
+  margin:0;min-height:100vh;padding-bottom:82px;color:var(--text);
   background:radial-gradient(circle at 50% -10%,#102337 0,#07121d 35%,#02070c 80%);
   font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
 }
@@ -34,9 +22,7 @@ button,input{font:inherit}
 .app{width:min(100%,760px);margin:auto;padding:14px 12px 12px}
 .card{
   background:linear-gradient(180deg,rgba(12,25,38,.98),rgba(6,15,24,.98));
-  border:1px solid var(--line);
-  border-radius:16px;
-  box-shadow:0 18px 42px rgba(0,0,0,.3);
+  border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 42px rgba(0,0,0,.3)
 }
 .header{display:flex;align-items:center;gap:11px;margin-bottom:13px}
 .menu{width:34px;font-size:32px;line-height:1;text-align:center}
@@ -45,200 +31,122 @@ button,input{font:inherit}
 .brand-sub{margin-top:4px;color:#c5ccd5;font-size:14px}
 
 .lookup{
-  display:grid;
-  grid-template-columns:1fr 1.1fr;
-  gap:10px;
-  align-items:center;
-  padding:12px 14px;
-  margin-bottom:12px;
+  display:grid;grid-template-columns:1fr 1.15fr;gap:10px;align-items:center;
+  padding:12px 14px;margin-bottom:12px
 }
 .lookup label{font-size:17px;font-weight:850}
 .lookup input{
-  width:100%;min-width:0;padding:10px 12px;
-  border:1px solid #2b3b4d;border-radius:9px;
-  outline:none;color:#fff;background:#02070c;
-  font-size:25px;font-weight:950;
+  width:100%;min-width:0;padding:10px 12px;border:1px solid #2b3b4d;border-radius:9px;
+  outline:none;color:#fff;background:#02070c;font-size:25px;font-weight:950
 }
 .load-btn{
-  grid-column:1/-1;
-  min-height:46px;
-  border:0;border-radius:9px;
-  color:#fff;background:linear-gradient(180deg,#5cdb31,#35ad1c);
-  font-size:17px;font-weight:950;cursor:pointer;
+  grid-column:1/-1;min-height:46px;border:0;border-radius:9px;color:#fff;
+  background:linear-gradient(180deg,#5cdb31,#35ad1c);font-size:17px;font-weight:950;cursor:pointer
 }
-.error{display:none;grid-column:1/-1;color:#ff817d;text-align:center;font-size:13px}
+.load-btn:disabled{opacity:.65;cursor:wait}
+.error,.loaded-date{display:none;grid-column:1/-1;text-align:center;font-size:13px}
+.error{color:#ff817d}
+.loaded-date{color:#bdecae;font-weight:850}
 
-/* Compact metrics come first so the gauge and sliders sit together below. */
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.summary-card{padding:13px}
+.summary-label{font-size:11px;font-weight:950;letter-spacing:.5px;color:var(--muted)}
+.summary-main{margin-top:4px;font-size:18px;font-weight:950}
+.summary-copy{margin-top:5px;color:#dce3ea;font-size:13px;line-height:1.35}
+.win{border-color:#2f7f27;background:linear-gradient(180deg,#102317,#08150d)}
+.focus{border-color:#8d7415;background:linear-gradient(180deg,#2a240d,#151205)}
+
 .numbers{padding:10px 9px;margin-bottom:12px}
 .section-title{margin:0 0 8px 2px;font-size:18px;font-weight:950}
 .metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .metric{
-  min-width:0;padding:9px 3px 8px;
-  border:1px solid #26374a;border-radius:11px;
-  background:#0b1723;text-align:center;
+  min-width:0;padding:9px 3px 8px;border:1px solid #26374a;border-radius:11px;
+  background:#0b1723;text-align:center
 }
 .metric svg{width:31px;height:31px;stroke:currentColor}
 .metric-value{margin:3px 0;font-size:27px;font-weight:950;line-height:1}
 .metric-name{font-size:11px;font-weight:800;white-space:nowrap}
-.red{color:var(--red)} .blue{color:var(--blue)}
-.yellow{color:var(--yellow)} .purple{color:var(--purple)}
+.metric-compare{margin-top:4px;font-size:9px;color:#c7d0da;min-height:22px}
+.red{color:var(--red)}.blue{color:var(--blue)}.yellow{color:var(--yellow)}.purple{color:var(--purple)}
 
 .gauge-card{position:relative;padding:14px 10px 9px;margin-bottom:8px}
 .kicker{color:var(--green);font-size:18px;font-weight:950}
 .sub{margin-top:3px;color:#c9d0da;font-size:13px}
 .how{
-  position:absolute;right:9px;top:9px;
-  padding:7px 9px;border:1px solid #2b3c4e;border-radius:8px;
-  color:#fff;background:rgba(7,16,25,.5);
-  font-size:11px;font-weight:850;
+  position:absolute;right:9px;top:9px;padding:7px 9px;border:1px solid #2b3c4e;border-radius:8px;
+  color:#fff;background:rgba(7,16,25,.5);font-size:11px;font-weight:850
 }
 .gauge-shell{position:relative;height:282px;overflow:hidden}
 .gauge-svg{
-  position:absolute;left:50%;top:0;
-  width:410px;height:251px;
-  transform:translateX(-50%);
-  overflow:visible;
+  position:absolute;left:50%;top:0;width:410px;height:251px;transform:translateX(-50%);overflow:visible
 }
 .zone{fill:none;stroke-width:30;stroke-linecap:butt}
-.zone-red{stroke:var(--red)}
-.zone-yellow{stroke:var(--yellow)}
-.zone-green{stroke:var(--green)}
+.zone-red{stroke:var(--red)}.zone-yellow{stroke:var(--yellow)}.zone-green{stroke:var(--green)}
 .major-tick{stroke:#fff;stroke-width:5;stroke-linecap:round}
 .zone-divider{stroke:#fff;stroke-width:7;stroke-linecap:round}
 .minor-tick{stroke-width:2.5;stroke-linecap:round}
-.gauge-number{
-  fill:#fff;font-size:19px;font-weight:950;
-  text-anchor:middle;dominant-baseline:middle;
-}
+.gauge-number{fill:#fff;font-size:19px;font-weight:950;text-anchor:middle;dominant-baseline:middle}
 .needle{fill:url(#needleGradient);filter:drop-shadow(0 0 5px rgba(255,255,255,.35))}
 .needle-cap{fill:url(#hubGradient)}
 .readout{
-  position:absolute;z-index:4;left:50%;bottom:0;transform:translateX(-50%);
-  min-width:190px;padding:10px 12px 3px;
-  border-radius:34px 34px 0 0;text-align:center;
-  background:linear-gradient(180deg,rgba(7,17,27,0),rgba(7,17,27,.98) 38%);
+  position:absolute;z-index:4;left:50%;bottom:0;transform:translateX(-50%);min-width:190px;
+  padding:10px 12px 3px;border-radius:34px 34px 0 0;text-align:center;
+  background:linear-gradient(180deg,rgba(7,17,27,0),rgba(7,17,27,.98) 38%)
 }
 .mph{font-size:70px;font-weight:950;line-height:.86;letter-spacing:-4px}
 .mph-unit{margin-top:4px;color:#bcc5d0;font-size:20px;font-weight:900}
-.goal-strip{
-  display:grid;grid-template-columns:1fr 1fr;
-  border:1px solid var(--line);border-radius:12px;overflow:hidden;
-}
-.goal-block{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  min-height:61px;padding:8px 6px;
-}
+.goal-strip{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.goal-block{display:flex;align-items:center;justify-content:center;gap:8px;min-height:61px;padding:8px 6px}
 .goal-block+.goal-block{border-left:1px solid var(--line)}
-.goal-icon{
-  display:grid;place-items:center;width:36px;height:36px;
-  border:2px solid currentColor;border-radius:50%;
-  font-size:22px;font-weight:950;flex:none;
-}
+.goal-icon{display:grid;place-items:center;width:36px;height:36px;border:2px solid currentColor;border-radius:50%;font-size:22px;font-weight:950;flex:none}
 .delta{font-size:18px;font-weight:950;color:var(--red)}
 .goal-label{color:var(--green);font-size:14px;font-weight:950}
 .goal-number{font-size:19px;font-weight:950}
 .caption{margin-top:2px;color:#d4dae2;font-size:10px}
 
-/* The simulator starts immediately after the gauge. */
 .simulator{padding:9px 12px 6px;margin-bottom:10px}
 .simulator h2{margin:0 0 2px;font-size:18px}
 .simulator-sub{margin:0 0 5px;color:#c5ccd5;font-size:12px}
-.slider-row{
-  display:grid;
-  grid-template-columns:92px 1fr 67px;
-  gap:8px;align-items:center;
-  padding:9px 0;
-}
+.slider-row{display:grid;grid-template-columns:92px 1fr 67px;gap:8px;align-items:center;padding:9px 0}
 .slider-name{font-size:13px;font-weight:900}
 .slider-wrap{min-width:0;display:grid;grid-template-rows:auto 14px}
-.range{
-  width:100%;height:22px;margin:0;
-  appearance:none;-webkit-appearance:none;
-  background:transparent;cursor:pointer;
-}
-.range::-webkit-slider-runnable-track{
-  height:5px;border-radius:999px;
-  background:linear-gradient(to right,currentColor 0 var(--fill,30%),var(--track) var(--fill,30%) 100%);
-}
-.range::-webkit-slider-thumb{
-  appearance:none;-webkit-appearance:none;
-  width:24px;height:24px;margin-top:-10px;
-  border:1px solid rgba(255,255,255,.16);border-radius:50%;
-  background:currentColor;box-shadow:0 3px 10px rgba(0,0,0,.42);
-}
+.range{width:100%;height:22px;margin:0;appearance:none;-webkit-appearance:none;background:transparent;cursor:pointer}
+.range::-webkit-slider-runnable-track{height:5px;border-radius:999px;background:linear-gradient(to right,currentColor 0 var(--fill,30%),var(--track) var(--fill,30%) 100%)}
+.range::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:24px;height:24px;margin-top:-10px;border:1px solid rgba(255,255,255,.16);border-radius:50%;background:currentColor;box-shadow:0 3px 10px rgba(0,0,0,.42)}
 .range::-moz-range-track{height:5px;border-radius:999px;background:var(--track)}
 .range::-moz-range-progress{height:5px;border-radius:999px;background:currentColor}
-.range::-moz-range-thumb{
-  width:24px;height:24px;border:0;border-radius:50%;
-  background:currentColor;box-shadow:0 3px 10px rgba(0,0,0,.42);
-}
-.range-labels{
-  display:flex;justify-content:space-between;align-items:flex-end;
-  color:#e0e5eb;font-size:10px;
-}
+.range::-moz-range-thumb{width:24px;height:24px;border:0;border-radius:50%;background:currentColor;box-shadow:0 3px 10px rgba(0,0,0,.42)}
+.range-labels{display:flex;justify-content:space-between;align-items:flex-end;color:#e0e5eb;font-size:10px}
 .slider-value{text-align:right;white-space:nowrap;font-size:19px;font-weight:950}
 .slider-value small{font-size:.58em;font-weight:850}
 
-.opportunity{
-  display:grid;grid-template-columns:50px 1fr 16px;
-  gap:9px;align-items:center;
-  padding:12px;margin-bottom:9px;border-color:#399d1b;
-}
+.opportunity{display:grid;grid-template-columns:50px 1fr 16px;gap:9px;align-items:center;padding:12px;margin-bottom:9px;border-color:#399d1b}
 .opp-icon{width:42px;height:42px;color:var(--green)}
 .opp-title{color:var(--green);font-size:12px;font-weight:950}
 .opp-main{margin-top:2px;font-size:17px;font-weight:950}
 .opp-gain{margin-top:2px;color:var(--green);font-size:16px;font-weight:950}
 .chev{color:#c4ccd5;font-size:28px}
-.reset{
-  width:100%;min-height:44px;border:1px solid #17314b;border-radius:9px;
-  color:var(--blue);background:#0b1927;font-size:13px;font-weight:950;cursor:pointer;
-}
-.nav{
-  position:fixed;z-index:20;left:50%;bottom:0;transform:translateX(-50%);
-  width:min(100%,760px);display:grid;grid-template-columns:repeat(5,1fr);
-  padding:7px 5px calc(7px + env(safe-area-inset-bottom));
-  border-top:1px solid #203044;background:rgba(3,11,18,.98);
-  backdrop-filter:blur(12px);
-}
+.reset{width:100%;min-height:44px;border:1px solid #17314b;border-radius:9px;color:var(--blue);background:#0b1927;font-size:13px;font-weight:950;cursor:pointer}
+
+.nav{position:fixed;z-index:20;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,760px);display:grid;grid-template-columns:repeat(5,1fr);padding:7px 5px calc(7px + env(safe-area-inset-bottom));border-top:1px solid #203044;background:rgba(3,11,18,.98);backdrop-filter:blur(12px)}
 .nav-item{text-align:center;color:#a9b2be;font-size:9px}
 .nav-item.active{color:var(--green)}
 .nav-item svg{display:block;width:20px;height:20px;margin:0 auto 3px;stroke:currentColor}
 
-.modal{
-  display:none;position:fixed;z-index:50;inset:0;place-items:center;
-  padding:20px;background:rgba(0,0,0,.72);
-}
+.modal{display:none;position:fixed;z-index:50;inset:0;place-items:center;padding:20px;background:rgba(0,0,0,.72)}
 .modal.open{display:grid}
-.modal-card{
-  width:min(100%,430px);padding:20px;border:1px solid var(--line);
-  border-radius:17px;background:#0a1622;
-}
+.modal-card{width:min(100%,430px);padding:20px;border:1px solid var(--line);border-radius:17px;background:#0a1622}
 .modal-card h3{margin:0 0 8px;font-size:22px}
 .modal-card p{margin:0;color:#c9d0d9;line-height:1.5}
-.modal-card button{
-  width:100%;margin-top:16px;padding:11px;border:0;border-radius:8px;
-  color:#fff;background:#35ad1c;font-weight:900;
-}
+.modal-card button{width:100%;margin-top:16px;padding:11px;border:0;border-radius:8px;color:#fff;background:#35ad1c;font-weight:900}
 
 @media(min-width:600px){
-  body{padding-bottom:88px}
-  .app{padding:18px}
-  .brand-title{font-size:35px}.brand-sub{font-size:18px}
-  .lookup{grid-template-columns:1fr 1.2fr 1.4fr;padding:14px 28px}
-  .lookup label{font-size:21px}.lookup input{font-size:30px}
-  .load-btn{grid-column:auto;font-size:20px}
-  .numbers{padding:12px 16px}
-  .metric-grid{gap:12px}.metric{padding:12px}
-  .metric svg{width:40px;height:40px}.metric-value{font-size:34px}.metric-name{font-size:15px}
-  .gauge-shell{height:410px}
-  .gauge-svg{width:650px;height:398px}
-  .zone{stroke-width:42}.major-tick{stroke-width:7}.minor-tick{stroke-width:3.5}
-  .gauge-number{font-size:28px}
+  body{padding-bottom:88px}.app{padding:18px}.brand-title{font-size:35px}.brand-sub{font-size:18px}
+  .lookup{grid-template-columns:1fr 1.2fr 1.4fr;padding:14px 28px}.lookup label{font-size:21px}.lookup input{font-size:30px}.load-btn{grid-column:auto;font-size:20px}
+  .numbers{padding:12px 16px}.metric-grid{gap:12px}.metric{padding:12px}.metric svg{width:40px;height:40px}.metric-value{font-size:34px}.metric-name{font-size:15px}.metric-compare{font-size:11px}
+  .gauge-shell{height:410px}.gauge-svg{width:650px;height:398px}.zone{stroke-width:42}.major-tick{stroke-width:7}.minor-tick{stroke-width:3.5}.gauge-number{font-size:28px}
   .readout{min-width:270px}.mph{font-size:105px}.mph-unit{font-size:29px}
-  .simulator{padding:12px 20px}
-  .slider-row{grid-template-columns:190px 1fr 120px;gap:16px;padding:12px 0}
-  .slider-name{font-size:19px}.slider-value{font-size:29px}
-  .range-labels{font-size:14px}
+  .simulator{padding:12px 20px}.slider-row{grid-template-columns:190px 1fr 120px;gap:16px;padding:12px 0}.slider-name{font-size:19px}.slider-value{font-size:29px}.range-labels{font-size:14px}
 }
 </style>
 </head>
@@ -254,48 +162,57 @@ button,input{font:inherit}
     </svg>
     <div>
       <h1 class="brand-title">MPH COACH</h1>
-      <div class="brand-sub">MPH Simulator &amp; Improvement Tool</div>
+      <div class="brand-sub">Live Performance Coaching</div>
     </div>
   </header>
 
   <section class="lookup card">
     <label for="cashier">Cashier Number</label>
-    <input id="cashier" inputmode="numeric" value="146">
-    <input id="performanceDate" type="date">
-    <button id="loadBtn" class="load-btn" type="button">☁ &nbsp; LOAD MY NUMBERS</button>
-    <div id="error" class="error">Use sample cashier number 146.</div>
+    <input id="cashier" inputmode="numeric" autocomplete="off" placeholder="Enter number">
+    <button id="loadBtn" class="load-btn" type="button">☁ &nbsp; LOAD MY COACH</button>
+    <div id="error" class="error"></div>
+    <div id="loadedDate" class="loaded-date"></div>
+  </section>
+
+  <section class="summary-grid">
+    <article class="summary-card card win">
+      <div class="summary-label">🏆 BIGGEST WIN</div>
+      <div id="winMain" class="summary-main">Load your latest numbers</div>
+      <div id="winCopy" class="summary-copy">Your strongest metric will appear here.</div>
+    </article>
+    <article class="summary-card card focus">
+      <div class="summary-label">🎯 TODAY'S FOCUS</div>
+      <div id="focusMain" class="summary-main">One positive next step</div>
+      <div id="focusCopy" class="summary-copy">Your best coaching opportunity will appear here.</div>
+    </article>
   </section>
 
   <section class="numbers card">
-    <h2 class="section-title">TODAY'S NUMBERS</h2>
+    <h2 class="section-title">LATEST NUMBERS</h2>
     <div class="metric-grid">
       <div class="metric">
-        <svg class="red" viewBox="0 0 64 64" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M8 12h8l6 29h27l7-21H20"/><circle cx="27" cy="51" r="4"/><circle cx="49" cy="51" r="4"/>
-        </svg>
+        <svg class="red" viewBox="0 0 64 64" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h8l6 29h27l7-21H20"/><circle cx="27" cy="51" r="4"/><circle cx="49" cy="51" r="4"/></svg>
         <div id="ringTile" class="metric-value red">48.4</div>
         <div class="metric-name">Ring Time</div>
+        <div id="ringCompare" class="metric-compare">—</div>
       </div>
       <div class="metric">
-        <svg class="blue" viewBox="0 0 64 64" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="8" y="17" width="48" height="30" rx="4"/><path d="M35 25c-7-3-11 6-3 7 8 1 4 10-4 7M32 22v20"/>
-        </svg>
+        <svg class="blue" viewBox="0 0 64 64" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="17" width="48" height="30" rx="4"/><path d="M35 25c-7-3-11 6-3 7 8 1 4 10-4 7M32 22v20"/></svg>
         <div id="tenderTile" class="metric-value blue">8.7</div>
         <div class="metric-name">Tender Time</div>
+        <div id="tenderCompare" class="metric-compare">—</div>
       </div>
       <div class="metric">
-        <svg class="yellow" viewBox="0 0 64 64" fill="none" stroke-width="4" stroke-linecap="round">
-          <circle cx="32" cy="18" r="10"/><path d="M14 52c2-13 9-20 18-20s16 7 18 20z"/>
-        </svg>
+        <svg class="yellow" viewBox="0 0 64 64" fill="none" stroke-width="4" stroke-linecap="round"><circle cx="32" cy="18" r="10"/><path d="M14 52c2-13 9-20 18-20s16 7 18 20z"/></svg>
         <div id="inactiveTile" class="metric-value yellow">4.1</div>
         <div class="metric-name">Inactive Time</div>
+        <div id="inactiveCompare" class="metric-compare">—</div>
       </div>
       <div class="metric">
-        <svg class="purple" viewBox="0 0 64 64" fill="none" stroke-width="4" stroke-linecap="round">
-          <rect x="14" y="27" width="36" height="28" rx="4"/><path d="M22 27v-8a10 10 0 0 1 20 0v8"/>
-        </svg>
+        <svg class="purple" viewBox="0 0 64 64" fill="none" stroke-width="4" stroke-linecap="round"><rect x="14" y="27" width="36" height="28" rx="4"/><path d="M22 27v-8a10 10 0 0 1 20 0v8"/></svg>
         <div id="secureTile" class="metric-value purple">0.2</div>
         <div class="metric-name">Terminal Secure</div>
+        <div id="secureCompare" class="metric-compare">—</div>
       </div>
     </div>
   </section>
@@ -304,27 +221,20 @@ button,input{font:inherit}
     <div class="kicker">YOUR MPH</div>
     <div class="sub">Members Per Hour</div>
     <button id="howBtn" class="how" type="button">ⓘ &nbsp; HOW IT WORKS</button>
-
     <div class="gauge-shell">
       <svg class="gauge-svg" viewBox="0 0 760 465" aria-label="MPH gauge">
         <defs>
-          <linearGradient id="needleGradient" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#cbd4df"/>
-          </linearGradient>
+          <linearGradient id="needleGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#cbd4df"/></linearGradient>
           <radialGradient id="hubGradient"><stop offset="0" stop-color="#2b3745"/><stop offset="1" stop-color="#111922"/></radialGradient>
         </defs>
         <path class="zone zone-red" d="M80 370 A300 300 0 0 1 230 110.2"/>
         <path class="zone zone-yellow" d="M230 110.2 A300 300 0 0 1 530 110.2"/>
         <path class="zone zone-green" d="M530 110.2 A300 300 0 0 1 680 370"/>
         <g id="ticks"></g>
-        <g id="needleGroup">
-          <path class="needle" d="M374 370 L380 145 L386 370 Z"/>
-          <circle class="needle-cap" cx="380" cy="370" r="25"/>
-        </g>
+        <g id="needleGroup"><path class="needle" d="M374 370 L380 145 L386 370 Z"/><circle class="needle-cap" cx="380" cy="370" r="25"/></g>
       </svg>
       <div class="readout"><div id="mphValue" class="mph">58.6</div><div class="mph-unit">MPH</div></div>
     </div>
-
     <div class="goal-strip">
       <div class="goal-block">
         <div id="deltaIcon" class="goal-icon red">↓</div>
@@ -339,39 +249,40 @@ button,input{font:inherit}
 
   <section class="simulator card">
     <h2>IMPROVE YOUR MPH</h2>
-    <p class="simulator-sub">Adjust the sliders to see how changes impact your MPH</p>
+    <p class="simulator-sub">Adjust all four sliders to see how changes impact your MPH</p>
 
     <div class="slider-row red">
       <div class="slider-name">Ring Time</div>
-      <div class="slider-wrap"><input id="ring" class="range" type="range" min="20" max="50" step="0.1" value="48.4"><div class="range-labels"><span>20</span><span>50</span></div></div>
+      <div class="slider-wrap"><input id="ring" class="range" type="range" min="15" max="80" step="0.1" value="48.4"><div class="range-labels"><span>15</span><span>80</span></div></div>
       <div id="ringValue" class="slider-value">48.4 <small>sec</small></div>
     </div>
+
     <div class="slider-row blue">
       <div class="slider-name">Tender Time</div>
-      <div class="slider-wrap"><input id="tender" class="range" type="range" min="5" max="20" step="0.1" value="8.7"><div class="range-labels"><span>5</span><span>20</span></div></div>
+      <div class="slider-wrap"><input id="tender" class="range" type="range" min="5" max="30" step="0.1" value="8.7"><div class="range-labels"><span>5</span><span>30</span></div></div>
       <div id="tenderValue" class="slider-value">8.7 <small>sec</small></div>
     </div>
+
     <div class="slider-row yellow">
       <div class="slider-name">Inactive Time</div>
-      <div class="slider-wrap"><input id="inactive" class="range" type="range" min="0" max="15" step="0.1" value="4.1"><div class="range-labels"><span>0</span><span>15</span></div></div>
+      <div class="slider-wrap"><input id="inactive" class="range" type="range" min="0" max="30" step="0.1" value="4.1"><div class="range-labels"><span>0</span><span>30</span></div></div>
       <div id="inactiveValue" class="slider-value">4.1 <small>sec</small></div>
     </div>
+
     <div class="slider-row purple">
       <div class="slider-name">Terminal Secure</div>
-      <div class="slider-wrap"><input id="secure" class="range" type="range" min="0" max="10" step="0.1" value="0.2"><div class="range-labels"><span>0</span><span>10</span></div></div>
+      <div class="slider-wrap"><input id="secure" class="range" type="range" min="0" max="15" step="0.1" value="0.2"><div class="range-labels"><span>0</span><span>15</span></div></div>
       <div id="secureValue" class="slider-value">0.2 <small>sec</small></div>
     </div>
   </section>
 
   <section class="opportunity card">
-    <svg class="opp-icon" viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round">
-      <circle cx="34" cy="44" r="24"/><circle cx="34" cy="44" r="12"/><path d="M34 44L62 16M50 16h12v12"/>
-    </svg>
-    <div><div class="opp-title">TODAY'S BIGGEST OPPORTUNITY</div><div id="oppMain" class="opp-main">Improve Ring Time by 2.0 sec</div><div id="oppGain" class="opp-gain">Potential Gain: +2.0 MPH</div></div>
+    <svg class="opp-icon" viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"><circle cx="34" cy="44" r="24"/><circle cx="34" cy="44" r="12"/><path d="M34 44L62 16M50 16h12v12"/></svg>
+    <div><div class="opp-title">SIMULATOR OPPORTUNITY</div><div id="oppMain" class="opp-main">Improve Ring Time by 2.0 sec</div><div id="oppGain" class="opp-gain">Potential Gain: +2.0 MPH</div></div>
     <div class="chev">›</div>
   </section>
 
-  <button id="resetBtn" class="reset" type="button">↻ &nbsp; RESET TO TODAY'S NUMBERS</button>
+  <button id="resetBtn" class="reset" type="button">↻ &nbsp; RESET TO LATEST NUMBERS</button>
 </div>
 
 <nav class="nav">
@@ -382,57 +293,46 @@ button,input{font:inherit}
   <div class="nav-item"><svg viewBox="0 0 32 32" fill="none" stroke-width="2.3"><circle cx="16" cy="16" r="4"/><path d="M16 3v5M16 24v5M3 16h5M24 16h5"/></svg>SETTINGS</div>
 </nav>
 
-<div id="modal" class="modal"><div class="modal-card"><h3>How it works</h3><p>MPH is calculated behind the scenes by adding Ring Time, Tender Time, Inactive Time, and Terminal Secure, then dividing 3,600 by that total. The cashier only sees the result.</p><button id="closeModal">GOT IT</button></div></div>
+<div id="modal" class="modal"><div class="modal-card"><h3>How it works</h3><p>MPH is calculated by adding Ring Time, Tender Time, Inactive Time, and Terminal Secure, then dividing 3,600 by that total. Warehouse comparisons use the same performance date as the cashier’s latest record.</p><button id="closeModal" type="button">GOT IT</button></div></div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzZ3MPOIK7xZeL2KR1AjA6D5aHuIvp5JLD2aL5mD49CDnFCxzxznEBoFbEHZ9nDe6It/exec";
+const API_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+
 const baseline={ring:48.4,tender:8.7,inactive:4.1,secure:0.2};
+const averages={ring:null,tender:null,inactive:null,secure:null};
 const ids=["ring","tender","inactive","secure"];
 const $=id=>document.getElementById(id);
 let currentAngle=-90;
 let animationFrame=null;
 
 function buildTicks(){
-  const group=$("ticks"),NS="http://www.w3.org/2000/svg";
-  const cx=380,cy=370;
+  const group=$("ticks"),NS="http://www.w3.org/2000/svg",cx=380,cy=370;
   for(let i=0;i<=30;i++){
-    const value=40+i,angle=Math.PI-(i/30)*Math.PI,major=i%5===0;
-    const divider=value===50||value===60;
+    const value=40+i,angle=Math.PI-(i/30)*Math.PI,major=i%5===0,divider=value===50||value===60;
     const r1=divider?274:(major?282:289),r2=divider?312:(major?306:302);
     const line=document.createElementNS(NS,"line");
-    line.setAttribute("x1",cx+Math.cos(angle)*r1);
-    line.setAttribute("y1",cy-Math.sin(angle)*r1);
-    line.setAttribute("x2",cx+Math.cos(angle)*r2);
-    line.setAttribute("y2",cy-Math.sin(angle)*r2);
+    line.setAttribute("x1",cx+Math.cos(angle)*r1);line.setAttribute("y1",cy-Math.sin(angle)*r1);
+    line.setAttribute("x2",cx+Math.cos(angle)*r2);line.setAttribute("y2",cy-Math.sin(angle)*r2);
     line.setAttribute("class",divider?"zone-divider":(major?"major-tick":"minor-tick"));
     if(!major) line.style.stroke=value<50?"var(--red)":value<60?"var(--yellow)":"var(--green)";
     group.appendChild(line);
     if(major){
-      const text=document.createElementNS(NS,"text");
-      const lr=255;
-      text.setAttribute("x",cx+Math.cos(angle)*lr);
-      text.setAttribute("y",cy-Math.sin(angle)*lr);
-      text.setAttribute("class","gauge-number");
-      text.textContent=value;
-      group.appendChild(text);
+      const text=document.createElementNS(NS,"text"),lr=255;
+      text.setAttribute("x",cx+Math.cos(angle)*lr);text.setAttribute("y",cy-Math.sin(angle)*lr);
+      text.setAttribute("class","gauge-number");text.textContent=value;group.appendChild(text);
     }
   }
 }
 
-function values(){return Object.fromEntries(ids.map(id=>[id,+$(id).value]))}
-function mph(v){return 3600/(v.ring+v.tender+v.inactive+v.secure)}
-function gaugeAngle(value){
-  const clamped=Math.max(40,Math.min(70,value));
-  return -90+((clamped-40)/30)*180;
-}
+function values(){return Object.fromEntries(ids.map(id=>[id,Number($(id).value)]))}
+function mph(v){const total=v.ring+v.tender+v.inactive+v.secure;return total>0?3600/total:0}
+function gaugeAngle(value){const clamped=Math.max(40,Math.min(70,value));return -90+((clamped-40)/30)*180}
 
-/* Attribute-based SVG animation works reliably in mobile Safari. */
 function animateNeedle(target){
   if(animationFrame) cancelAnimationFrame(animationFrame);
   const start=currentAngle,change=target-start,startTime=performance.now(),duration=300;
   const frame=now=>{
-    const t=Math.min(1,(now-startTime)/duration);
-    const eased=1-Math.pow(1-t,3);
+    const t=Math.min(1,(now-startTime)/duration),eased=1-Math.pow(1-t,3);
     currentAngle=start+change*eased;
     $("needleGroup").setAttribute("transform",`rotate(${currentAngle} 380 370)`);
     if(t<1) animationFrame=requestAnimationFrame(frame);
@@ -441,15 +341,61 @@ function animateNeedle(target){
 }
 
 function setFill(input){
-  const pct=((+input.value-(+input.min))/(+input.max-(+input.min)))*100;
-  input.style.setProperty("--fill",pct+"%");
+  const min=Number(input.min),max=Number(input.max),value=Number(input.value);
+  input.style.setProperty("--fill",((value-min)/(max-min))*100+"%");
+}
+
+function compareText(value,average){
+  if(average===null||Number.isNaN(average)) return "No warehouse average";
+  const diff=value-average;
+  if(Math.abs(diff)<0.05) return "At warehouse average";
+  return `${Math.abs(diff).toFixed(2)} sec ${diff<0?"faster":"slower"} than avg`;
+}
+
+function updateComparisons(){
+  $("ringCompare").textContent=compareText(baseline.ring,averages.ring);
+  $("tenderCompare").textContent=compareText(baseline.tender,averages.tender);
+  $("inactiveCompare").textContent=compareText(baseline.inactive,averages.inactive);
+  $("secureCompare").textContent=compareText(baseline.secure,averages.secure);
+}
+
+function updateCoaching(){
+  const metricList=[
+    {key:"ring",name:"Ring Time",tip:"Keep a smooth, accurate scanning rhythm and reduce avoidable pauses between items."},
+    {key:"tender",name:"Tender Time",tip:"Prompt for payment early and keep the interaction calm when a card needs another try."},
+    {key:"inactive",name:"Inactive Time",tip:"Look for small pauses you can turn into forward progress between members."},
+    {key:"secure",name:"Terminal Secure",tip:"Watch for avoidable lockouts or screen resets while following all security procedures."}
+  ].filter(m=>averages[m.key]!==null);
+
+  if(!metricList.length){
+    $("winMain").textContent="Your latest results are loaded";
+    $("winCopy").textContent="Warehouse comparisons will appear when same-day averages are available.";
+    $("focusMain").textContent="Keep building consistency";
+    $("focusCopy").textContent="Use the simulator to explore small, realistic improvements.";
+    return;
+  }
+
+  const ranked=metricList.map(m=>({...m,diff:baseline[m.key]-averages[m.key]}));
+  const win=[...ranked].sort((a,b)=>a.diff-b.diff)[0];
+  const focus=[...ranked].sort((a,b)=>b.diff-a.diff)[0];
+
+  $("winMain").textContent=win.diff<=0?win.name:`Strongest area: ${win.name}`;
+  $("winCopy").textContent=win.diff<=0
+    ? `You are ${Math.abs(win.diff).toFixed(2)} seconds faster than the warehouse average. Keep building on that strength.`
+    : `This is currently your closest metric to the warehouse average.`;
+
+  if(focus.diff<=0){
+    $("focusMain").textContent="Consistency";
+    $("focusCopy").textContent="Every compared metric is at or better than the warehouse average. Keep doing what works.";
+  }else{
+    $("focusMain").textContent=focus.name;
+    $("focusCopy").textContent=`You are only ${focus.diff.toFixed(2)} seconds from the warehouse average. ${focus.tip}`;
+  }
 }
 
 function update(){
   const v=values(),score=mph(v);
-  $("mphValue").textContent=score.toFixed(1);
-  animateNeedle(gaugeAngle(score));
-
+  $("mphValue").textContent=score.toFixed(1);animateNeedle(gaugeAngle(score));
   const delta=score-60;
   $("deltaValue").textContent=`${delta>=0?"+":""}${delta.toFixed(1)} MPH`;
   $("deltaValue").style.color=delta>=0?"var(--green)":"var(--red)";
@@ -459,79 +405,90 @@ function update(){
   [["ring","ringValue","ringTile"],["tender","tenderValue","tenderTile"],["inactive","inactiveValue","inactiveTile"],["secure","secureValue","secureTile"]]
     .forEach(([key,valueId,tileId])=>{
       $(valueId).innerHTML=`${v[key].toFixed(1)} <small>sec</small>`;
-      $(tileId).textContent=v[key].toFixed(1);
-      setFill($(key));
+      $(tileId).textContent=v[key].toFixed(1);setFill($(key));
     });
 
   const total=v.ring+v.tender+v.inactive+v.secure;
   const options=[
-    {name:"Ring Time",room:v.ring-(+$("ring").min)},
-    {name:"Tender Time",room:v.tender-(+$("tender").min)},
-    {name:"Inactive Time",room:v.inactive-(+$("inactive").min)},
-    {name:"Terminal Secure",room:v.secure-(+$("secure").min)}
+    {name:"Ring Time",room:v.ring-Number($("ring").min)},
+    {name:"Tender Time",room:v.tender-Number($("tender").min)},
+    {name:"Inactive Time",room:v.inactive-Number($("inactive").min)},
+    {name:"Terminal Secure",room:v.secure-Number($("secure").min)}
   ].sort((a,b)=>b.room-a.room);
+
   const best=options[0],seconds=Math.min(2,Math.max(0,best.room));
   const improved=seconds>0?3600/(total-seconds):score;
-  const gain=Math.max(0,improved-score);
-
   $("oppMain").textContent=`Improve ${best.name} by ${seconds.toFixed(1)} sec`;
-  $("oppGain").textContent=`Potential Gain: +${gain.toFixed(1)} MPH`;
+  $("oppGain").textContent=`Potential Gain: +${Math.max(0,improved-score).toFixed(1)} MPH`;
 }
-ids.forEach(id => {
-  $(id).addEventListener("input", update);
-  $(id).addEventListener("change", update);
-});
-$("loadBtn").addEventListener("click", async () => {
-  const cashier = $("cashier").value.trim();
-  const date = $("performanceDate").value;
 
-  $("error").style.display = "none";
+function loadBaselineIntoSliders(){
+  ids.forEach(id=>{
+    const input=$(id),value=baseline[id];
+    if(value<Number(input.min)) input.min=Math.max(0,Math.floor(value-5));
+    if(value>Number(input.max)) input.max=Math.ceil(value+10);
+    input.value=value;
+  });
+  update();
+}
 
-  if (!cashier || !date) {
-    $("error").textContent = "Enter a cashier number and performance date.";
-    $("error").style.display = "block";
-    return;
+function formatPerformanceDate(dateText){
+  if(!dateText) return "";
+  const parsed=new Date(dateText+"T12:00:00");
+  return Number.isNaN(parsed.getTime())?dateText:parsed.toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"});
+}
+
+ids.forEach(id=>{$(id).addEventListener("input",update);$(id).addEventListener("change",update)});
+$("resetBtn").addEventListener("click",loadBaselineIntoSliders);
+
+$("loadBtn").addEventListener("click",async()=>{
+  const cashier=$("cashier").value.trim();
+  $("error").style.display="none";$("loadedDate").style.display="none";
+
+  if(!cashier){
+    $("error").textContent="Enter a cashier number.";$("error").style.display="block";return;
+  }
+  if(!API_URL||API_URL.includes("PASTE_YOUR")){
+    $("error").textContent="Add your Google Apps Script web-app URL in index.html first.";$("error").style.display="block";return;
   }
 
-  try {
-    $("loadBtn").textContent = "LOADING...";
+  try{
+    $("loadBtn").disabled=true;$("loadBtn").textContent="LOADING...";
+    const response=await fetch(`${API_URL}?cashier=${encodeURIComponent(cashier)}`);
+    if(!response.ok) throw new Error("Unable to reach the MPH Coach database.");
+    const data=await response.json();
+    if(!data.success) throw new Error(data.error||"No cashier record found.");
 
-    const response = await fetch(
-      `${API_URL}?cashier=${encodeURIComponent(cashier)}&date=${encodeURIComponent(date)}`
-    );
+    baseline.ring=Number(data.ringTime)||0;
+    baseline.tender=Number(data.tenderTime)||0;
+    baseline.inactive=Number(data.inactiveTime)||0;
+    baseline.secure=Number(data.terminalSecure)||0;
 
-    const data = await response.json();
+    averages.ring=data.warehouseAverages?.ringTime==null?null:Number(data.warehouseAverages.ringTime);
+    averages.tender=data.warehouseAverages?.tenderTime==null?null:Number(data.warehouseAverages.tenderTime);
+    averages.inactive=data.warehouseAverages?.inactiveTime==null?null:Number(data.warehouseAverages.inactiveTime);
+    averages.secure=data.warehouseAverages?.terminalSecure==null?null:Number(data.warehouseAverages.terminalSecure);
 
-    if (!data.success) {
-      throw new Error(data.error || "No cashier record found.");
-    }
+    loadBaselineIntoSliders();updateComparisons();updateCoaching();
 
-    baseline.ring = Number(data.ringTime) || 0;
-    baseline.tender = Number(data.tenderTime) || 0;
-    baseline.inactive = Number(data.inactiveTime) || 0;
-    baseline.secure = Number(data.terminalSecure) || 0;
-
-ids.forEach(id => {
-  $(id).value = baseline[id];
-});
-
-update();
-});
-    });
-
-    update();
-  } catch (error) {
-    $("error").textContent = error.message;
-    $("error").style.display = "block";
-  } finally {
-    $("loadBtn").textContent = "☁  LOAD MY NUMBERS";
+    $("loadedDate").textContent=`Latest performance date: ${formatPerformanceDate(data.performanceDate)}`;
+    $("loadedDate").style.display="block";
+  }catch(error){
+    console.error(error);$("error").textContent=error.message;$("error").style.display="block";
+  }finally{
+    $("loadBtn").disabled=false;$("loadBtn").textContent="☁  LOAD MY COACH";
   }
 });
+
+$("cashier").addEventListener("keydown",event=>{if(event.key==="Enter") $("loadBtn").click()});
+$("howBtn").addEventListener("click",()=>$("modal").classList.add("open"));
+$("closeModal").addEventListener("click",()=>$("modal").classList.remove("open"));
+$("modal").addEventListener("click",event=>{if(event.target===$("modal")) $("modal").classList.remove("open")});
 
 buildTicks();
 currentAngle=gaugeAngle(mph(baseline));
 $("needleGroup").setAttribute("transform",`rotate(${currentAngle} 380 370)`);
-update();
+loadBaselineIntoSliders();
 </script>
 </body>
 </html>
