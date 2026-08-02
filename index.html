@@ -172,6 +172,7 @@ button,input{font:inherit}
     <button id="loadBtn" class="load-btn" type="button">☁ &nbsp; LOAD MY COACH</button>
     <div id="error" class="error"></div>
     <div id="loadedDate" class="loaded-date"></div>
+    <div id="loadedTotal" class="loaded-date"></div>
   </section>
 
   <section class="summary-grid">
@@ -451,12 +452,12 @@ $("resetBtn").addEventListener("click",loadBaselineIntoSliders);
 
 $("loadBtn").addEventListener("click",async()=>{
   const cashier=$("cashier").value.trim();
-  $("error").style.display="none";$("loadedDate").style.display="none";
+  $("error").style.display="none";$("loadedDate").style.display="none";$("loadedTotal").style.display="none";
 
   if(!cashier){
     $("error").textContent="Enter a cashier number.";$("error").style.display="block";return;
   }
-  if(!API_URL||API_URL.includes("PASTE_YOUR")){
+  if(!API_URL||API_URL.includes("https://script.google.com/macros/s/AKfycbzZ3MPOIK7xZeL2KR1AjA6D5aHuIvp5JLD2aL5mD49CDnFCxzxznEBoFbEHZ9nDe6It/exec")){
     $("error").textContent="Add your Google Apps Script web-app URL in index.html first.";$("error").style.display="block";return;
   }
 
@@ -473,9 +474,12 @@ $("loadBtn").addEventListener("click",async()=>{
     baseline.secure=Number(data.terminalSecure)||0;
 
     const reportedTotal=Number(data.totalTime);
-    baseline.total=Number.isFinite(reportedTotal)&&reportedTotal>0
-      ? reportedTotal
-      : baseline.ring+baseline.tender+baseline.inactive+baseline.secure;
+
+    if(!Number.isFinite(reportedTotal)||reportedTotal<=0){
+      throw new Error("Total Time is missing from Google Sheet HISTORY column I.");
+    }
+
+    baseline.total=reportedTotal;
 
     averages.ring=data.warehouseAverages?.ringTime==null?null:Number(data.warehouseAverages.ringTime);
     averages.tender=data.warehouseAverages?.tenderTime==null?null:Number(data.warehouseAverages.tenderTime);
@@ -486,6 +490,8 @@ $("loadBtn").addEventListener("click",async()=>{
 
     $("loadedDate").textContent=`Latest performance date: ${formatPerformanceDate(data.performanceDate)}`;
     $("loadedDate").style.display="block";
+    $("loadedTotal").textContent=`AS400 Total Time: ${baseline.total.toFixed(2)} sec`;
+    $("loadedTotal").style.display="block";
   }catch(error){
     console.error(error);$("error").textContent=error.message;$("error").style.display="block";
   }finally{
